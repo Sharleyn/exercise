@@ -1,0 +1,46 @@
+<.header>
+  Listing Hotels
+  <:actions>
+    <.link patch={~p"/hotels/new"}>
+      <.button>New Hotel</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="hotels"
+  rows={@streams.hotels}
+  row_click={fn {_id, hotel} -> JS.navigate(~p"/hotels/#{hotel}") end}
+>
+  <:col :let={{_id, hotel}} label="Name">{hotel.name}</:col>
+  <:col :let={{_id, hotel}} label="Location">{hotel.location}</:col>
+  <:col :let={{_id, hotel}} label="Stars">{hotel.stars}</:col>
+  <:col :let={{_id, hotel}} label="Category"><%=Exercise.Hotels.hotel_star(hotel) %></:col>
+  <:col :let={{_id, hotel}} label="Breakfast">{hotel.breakfast}</:col>
+
+  <:action :let={{_id, hotel}}>
+    <div class="sr-only">
+      <.link navigate={~p"/hotels/#{hotel}"}>Show</.link>
+    </div>
+    <.link patch={~p"/hotels/#{hotel}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, hotel}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: hotel.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="hotel-modal" show on_cancel={JS.patch(~p"/hotels")}>
+  <.live_component
+    module={ExerciseWeb.HotelLive.FormComponent}
+    id={@hotel.id || :new}
+    title={@page_title}
+    action={@live_action}
+    hotel={@hotel}
+    patch={~p"/hotels"}
+  />
+</.modal>

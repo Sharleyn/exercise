@@ -18,6 +18,14 @@ defmodule ExerciseWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/hotels", HotelLive.Index, :index
+    live "/hotels/new", HotelLive.Index, :new
+    live "/hotels/:id/edit", HotelLive.Index, :edit
+
+    live "/hotels/:id", HotelLive.Show, :show
+    live "/hotels/:id/show/edit", HotelLive.Show, :edit
+
   end
 
   # Other scopes may use custom stacks.

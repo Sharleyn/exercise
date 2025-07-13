@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :exercise, Exercise.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "123456789",
   hostname: "localhost",
   database: "exercise_dev",
   stacktrace: true,
